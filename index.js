@@ -1,11 +1,20 @@
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
+  event.respondWith(handle(event.request))
 })
 
-async function handleRequest(request) {
+async function handle(request) {
   const url = new URL(request.url)
-  url.hostname = 'analytics.yisscraft.ru' // IP твоего сервера
-  url.port = '25781' // порт панели Plan
+  // подменяем хост и порт на тот, где реально работает Plan
+  url.hostname = 'analytics.yisscraft.ru'      // ваш IP
+  url.port     = '25781'              // порт web‑панели
 
-  return fetch(url, request)
+  // хост‑заголовок должен остаться panel.yisscraft.ru
+  const headers = new Headers(request.headers)
+  headers.set('Host', 'panel.yisscraft.ru')
+
+  return fetch(url.toString(), {
+    method:  request.method,
+    headers: headers,
+    body:    request.body
+  })
 }
