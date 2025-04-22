@@ -9,10 +9,6 @@ async function handle(request) {
   url.hostname = 'analytics.yisscraft.ru'      // ваш IP
   url.port     = '25781'              // порт web‑панели
 
-  // хост‑заголовок должен остаться panel.yisscraft.ru
-  const headers = new Headers(request.headers)
-  headers.set('Host', 'panel.yisscraft.ru')
-
   return fetch(url.toString(), {
     method:  request.method,
     headers: headers,
