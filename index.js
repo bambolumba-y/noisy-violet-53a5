@@ -1,20 +1,25 @@
 addEventListener('fetch', event => {
-  event.respondWith(handle(event.request))
-})
+  event.respondWith(handle(event.request));
+});
 
 async function handle(request) {
-  const url = new URL(request.url)
-  // подменяем хост и порт на тот, где реально работает Plan
-  url.hostname = 'analytics.yisscraft.ru'      // ваш IP
-  url.port     = '25781'              // порт web‑панели
+  // разбираем URL запроса
+  const url = new URL(request.url);
 
-  // хост‑заголовок должен остаться panel.yisscraft.ru
-  const headers = new Headers(request.headers)
-  headers.set('Host', 'panel.yisscraft.ru')
+  // оставляем тот же домен, но ставим нужный порт
+  url.port = '25781';
+  // явно указываем, что на этом порту — HTTPS
+  url.protocol = 'https:';
 
-  return fetch(url.toString(), {
+  // сохраняем все остальные заголовки, в том числе Host: analytics.yisscraft.ru
+  const init = {
     method:  request.method,
-    headers: headers,
-    body:    request.body
-  })
+    headers: request.headers,
+    body:    request.body,
+    redirect: 'manual'
+  };
+
+  // делаем прозрачно прокси‑fetch на ваш Plan‑панельный порт
+  return fetch(url.toString(), init);
 }
+
