@@ -13,7 +13,7 @@ async function handle(request) {
   // а если он к analytics.yisscraft.ru — меняем порт/протокол и уходим к Plan
   url.hostname = 'analytics.yisscraft.ru';  // можно не менять, но пусть будет явно
   url.port     = '25781';
-  url.protocol = 'https:';                   // или 'https:' — в зависимости от конфигурации Plan
+  url.protocol = 'http:';                   // или 'https:' — в зависимости от конфигурации Plan
 
   // сохраним остальные заголовки, включая Host
   const init = {
